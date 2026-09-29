@@ -11,7 +11,7 @@ let tx, ty;
 let found = true; 
 let nextPing = 0; 
 let raf; 
-
+// so pointer position is kept up to date by pointermove 
 let lastX = 0.5, lastY = 0.5, boxW = 1, boxH = 1;
 
 startButton.onclick = () => {
@@ -31,3 +31,15 @@ field.onpointermove = e => {
     lastY = (e.clientY - r.top) / r.height;
 };
 
+//adding loop function than pointermove, so it says more
+// accurate even if you pause it 
+function loop() {
+    raf = requestAnimationFrame(loop);
+    if (!ctx || found) return;
+
+    const now = ctx.currentTime;
+    if (now <nextPing) return;
+//distance is an actual circle rather than a squashed ellipse one a wide box
+const dxPx = (tx - lastX) *boxW
+const 
+}
