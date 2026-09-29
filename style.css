@@ -1,0 +1,19 @@
+body {
+    font-family: sans-serif;
+    margin: 1em;
+}
+
+#f {
+    display: flex;
+    height: 60vh;
+    touch-action: none;
+    background: #dfeaf5;
+    align-items: center;
+    justify-content: center;
+    color: #89a;
+}
+
+button {
+    padding: .5em 1em;
+}
+
