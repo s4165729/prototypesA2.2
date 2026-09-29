@@ -40,6 +40,61 @@ function loop() {
     const now = ctx.currentTime;
     if (now <nextPing) return;
 //distance is an actual circle rather than a squashed ellipse one a wide box
-const dxPx = (tx - lastX) *boxW
-const 
+const dxPx = (tx - lastX) *boxW;
+const dyPx = (ty - lastY) * boxH;
+const dPx = Math.hypot(dxPx, dyPx);
+const maxDist = Math.hypot(boxW, boxH); 
+const hitRadius = Math.min(boxW, boxH) * 0.12;
+
+if (dPx < hitRadius) {
+    found = true;
+    playChord(); 
+    message.textContent = 'found it! press start to play again';
+    return;
+}
+
+const closeness = 1 - Math.min(dPx / (maxDist * 0.5),1); //0 far 1 near taget
+const note = SCALE[Math.min(SCALE.length-1, Math.floor(closeness * SCALE.length))];
+const pan = Math.max(-1, Math.min(1, dxPx / (boxW * 0.3)));
+
+Ping(note, pan);
+// faster pings the closer you get to the target
+//700ms far 120 right ontop
+
+nextPing = now + (0.7 - closeness * 0.58);
+}
+
+raf = requestAnimationFrame(loop);
+//plays a single short blip at the given freaqency 
+function ping(freq.pan) {
+    const t = ctx.currentTime;
+    const o = ctx.create0scillator();
+    const g = ctx.createGain();
+    const p = ctx.createStereoPanner();
+
+    o.frequency.value = freq;
+    p.pan.value = pan;
+
+    g.gain.setValueAtTime(0.22, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+
+    o.connect(g). connect(p).connect(ctx.destination);
+    o.start(t);
+    o.stop(t + 0.18);
+}
+//plays a short rising chord to confirm the target was found to the user
+function playChord() {
+    [523.25, 659.25, 783.98].forEach((freq,i) => {
+        const t = ctx.currentTime + i * 0.06;
+        const o = ctx.create0scillator();
+        const g = ctx.createGain();
+
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.2, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+        o.connect(g). connect(ctx.destination);
+        o.start(t);
+        o.stop(t + 0.6);
+    });
 }
