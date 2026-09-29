@@ -57,7 +57,7 @@ const closeness = 1 - Math.min(dPx / (maxDist * 0.5),1); //0 far 1 near taget
 const note = SCALE[Math.min(SCALE.length-1, Math.floor(closeness * SCALE.length))];
 const pan = Math.max(-1, Math.min(1, dxPx / (boxW * 0.3)));
 
-Ping(note, pan);
+ping(note, pan);
 // faster pings the closer you get to the target
 //700ms far 120 right ontop
 
@@ -66,9 +66,9 @@ nextPing = now + (0.7 - closeness * 0.58);
 
 raf = requestAnimationFrame(loop);
 //plays a single short blip at the given freaqency 
-function ping(freq.pan) {
+function ping(freq,pan) {
     const t = ctx.currentTime;
-    const o = ctx.create0scillator();
+    const o = ctx.createOscillator();
     const g = ctx.createGain();
     const p = ctx.createStereoPanner();
 
@@ -86,7 +86,7 @@ function ping(freq.pan) {
 function playChord() {
     [523.25, 659.25, 783.98].forEach((freq,i) => {
         const t = ctx.currentTime + i * 0.06;
-        const o = ctx.create0scillator();
+        const o = ctx.createOscillator();
         const g = ctx.createGain();
 
         o.frequency.value = freq;
